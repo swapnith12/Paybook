@@ -8,8 +8,8 @@ interface Config {
   LOG_LEVEL: string;
   REDIS_URL: string;
   AUTH_SERVICE_URL: string;
-  ACCOUNTS_SERVICE_URL: string;
-  TRANSACTION_SERVICE_URL: string;
+  BOOKS_SERVICE_URL: string;
+  STREAM_SERVICE_URL: string;
 }
 
 export const config: Config = {
@@ -24,8 +24,8 @@ export const config: Config = {
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   AUTH_SERVICE_URL: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
-  ACCOUNTS_SERVICE_URL:
+  BOOKS_SERVICE_URL:
     process.env.ACCOUNTS_SERVICE_URL || 'http://localhost:3002',
-  TRANSACTION_SERVICE_URL:
+  STREAM_SERVICE_URL:
     process.env.TRANSACTION_SERVICE_URL || 'http://localhost:3003',
 };

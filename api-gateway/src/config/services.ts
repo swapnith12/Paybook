@@ -15,13 +15,13 @@ class ServiceProxy {
     },
     {
       path: '/api/v1/accounts/',
-      url: config.ACCOUNTS_SERVICE_URL,
+      url: config.BOOKS_SERVICE_URL,
       pathRewrite: { '^/': '/api/v1/accounts/' },
       name: 'account-service',
     },
     {
       path: '/api/v1/transactions/',
-      url: config.TRANSACTION_SERVICE_URL,
+      url: config.STREAM_SERVICE_URL,
       pathRewrite: { '^/': '/api/v1/transactions/' },
       name: 'transaction-service',
     },
