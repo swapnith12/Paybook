@@ -1,7 +1,7 @@
 import passport from "passport";
 //@ts-ignore
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { prisma } from "./prisma.js";
+import { prisma } from "../utils/prisma.js";
 
 
 passport.use(
@@ -50,6 +50,6 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    }
+    } 
   )
 );
