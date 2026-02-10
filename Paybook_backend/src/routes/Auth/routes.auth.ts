@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
+import '../../Auth/google.strategy.js'
 // import {
 //   googleCallback,
 //   logout,
@@ -16,15 +17,11 @@ router.get(
     scope: ['profile', 'email'],
   })
 )
-
 // 🔁 Google OAuth callback
-router.get(
-  '/oauth2/redirect/google',
-  passport.authenticate('google', {
-    failureRedirect: '/login',
-    session: true,
-  }),
-)
+router.get('/oauth2/redirect/google', passport.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
 
 // // 👤 Get current logged-in user
 // router.get('/me', authenticate, me)

@@ -8,7 +8,7 @@ const userType = new GraphQLObjectType({
                 type:GraphQLString
             },
             name:{
-                type:GraphQLString
+                type:GraphQLString   
             },
             password:{
                 type:GraphQLString

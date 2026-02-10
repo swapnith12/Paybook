@@ -1,5 +1,5 @@
 import passport from "passport";
-import { prisma } from "./prisma.js";
+import { prisma } from "../utils/prisma.js";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);

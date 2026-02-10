@@ -20,4 +20,5 @@ model User {
   name      String?
   googleId  String?  @unique
   createdAt DateTime @default(now())
+  isAdmin   Boolean  @default(false)
 }

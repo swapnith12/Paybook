@@ -1,5 +1,8 @@
 import session from 'express-session';
+import { loadEnvFile } from 'node:process';
+loadEnvFile();
 
+console.log(process.env.SESSION_SECRET)
 export const sessionMiddleware = session({
   name: 'paybook.sid',
   secret: process.env.SESSION_SECRET!,
