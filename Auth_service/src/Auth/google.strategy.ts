@@ -2,6 +2,7 @@ import passport from "passport";
 //@ts-ignore
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { prisma } from "../utils/prisma.js";
+import './passport.js'
 
 
 passport.use(
@@ -9,7 +10,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: "http://localhost:3001/oauth2/redirect/google",
+      callbackURL: "http://localhost:3001/api/v1/auth/oauth2/redirect/google",
       scope: ["profile","email"],
     },
     async (_accessToken:any, _refreshToken:any, profile:any, done:any) => {

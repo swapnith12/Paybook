@@ -3,6 +3,7 @@ import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { config } from '.';
 import logger from './logger';
 import { ProxyErrorResponse, ServiceConfig } from '../types';
+import { authenticate } from '../middlewares/auth-middleware';
 
 class ServiceProxy {
   private static readonly serviceConfigs: ServiceConfig[] = [
@@ -14,16 +15,16 @@ class ServiceProxy {
       timeout: 5000,
     },
     {
-      path: '/api/v1/accounts/',
+      path: '/api/v1/books/',
       url: config.BOOKS_SERVICE_URL,
-      pathRewrite: { '^/': '/api/v1/accounts/' },
-      name: 'account-service',
+      pathRewrite: { '^/': '/api/v1/books/' },
+      name: 'book-service',
     },
-    {
-      path: '/api/v1/transactions/',
+    { 
+      path: '/api/v1/admin/',
       url: config.STREAM_SERVICE_URL,
-      pathRewrite: { '^/': '/api/v1/transactions/' },
-      name: 'transaction-service',
+      pathRewrite: { '^/': '/api/v1/admin/' },
+      name: 'admin-service',
     },
   ];
 

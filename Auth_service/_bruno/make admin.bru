@@ -1,0 +1,11 @@
+meta {
+  name: auth check
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api-gateway-base-url}}/makeAdmin
+  body: {"user":"swapnith kondapalli"}
+  auth: none
+}

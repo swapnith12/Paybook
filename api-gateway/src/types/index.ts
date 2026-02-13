@@ -13,3 +13,10 @@ export interface ProxyErrorResponse {
   status: number;
   timestamp: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  googleId: string;
+  isAdmin: boolean;
+}
