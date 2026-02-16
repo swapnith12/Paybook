@@ -1,0 +1,14 @@
+meta {
+  name: Upload tester
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api-gateway-base-url}}/api/v1/books/upload
+  body: multipartForm
+}
+
+body:multipartForm {
+  file: @{{book-file}}
+}

@@ -13,19 +13,23 @@ class ServiceProxy {
       pathRewrite: { '^/': '/api/v1/auth/' },
       name: 'auth-service',
       timeout: 5000,
+      isProtected:false
     },
     {
       path: '/api/v1/books/',
       url: config.BOOKS_SERVICE_URL,
       pathRewrite: { '^/': '/api/v1/books/' },
       name: 'book-service',
+      isProtected:true
     },
     { 
-      path: '/api/v1/admin/',
+      path: '/api/v1/stream/',
       url: config.STREAM_SERVICE_URL,
-      pathRewrite: { '^/': '/api/v1/admin/' },
-      name: 'admin-service',
+      pathRewrite: { '^/': '/api/v1/stream/' },
+      name: 'stream-service',
+      isProtected:true
     },
+
   ];
 
   private static createProxyOptions(service: ServiceConfig): Options {
@@ -69,7 +73,19 @@ class ServiceProxy {
   public static setupProxy(app: Application): void {
     ServiceProxy.serviceConfigs.forEach((service) => {
       const proxyOptions = ServiceProxy.createProxyOptions(service);
-      app.use(service.path, createProxyMiddleware(proxyOptions));
+       if (service.isProtected) {
+      app.use(
+        service.path,
+        authenticate, 
+        createProxyMiddleware(proxyOptions)
+      );
+    } else {
+      app.use(
+        service.path,
+        createProxyMiddleware(proxyOptions)
+      );
+    }
+
       logger.info(`Configured proxy for ${service.name} at ${service.path}`);
     });
   }

@@ -6,6 +6,7 @@ export interface ServiceConfig {
   pathRewrite: Record<string, string>;
   name: string;
   timeout?: number;
+  isProtected?:boolean
 }
 
 export interface ProxyErrorResponse {

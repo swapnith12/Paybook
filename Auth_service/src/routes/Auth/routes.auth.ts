@@ -66,10 +66,40 @@ router.post('/makeAdmin',isAuthenticated,async(req:Request,res:Response)=>{
     }
     return res.status(500).json({"message":"No User found with that Name"})
 })
-// // 👤 Get current logged-in user
-// router.get('/me', authenticate, me)
 
-// // 🚪 Logout
-// router.post('/logout', logout)
+
+router.post('/logout', isAuthenticated, async (req: Request, res: Response) => {
+  try {
+    const sessionId = req.sessionID;
+
+    // 1️⃣ Remove session from Redis
+    await RedisClient.del(`session:${sessionId}`);
+
+    // 2️⃣ Logout from passport
+    req.logout((err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Logout failed" });
+      }
+
+      // 3️⃣ Destroy express session
+      req.session.destroy((err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: "Session destroy failed" });
+        }
+
+        // 4️⃣ Clear cookie
+        res.clearCookie('connect.sid'); // default session cookie name
+
+        return res.status(200).json({ message: "Logged out successfully" });
+      });
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Logout error" });
+  }
+});
 
 export default router 
