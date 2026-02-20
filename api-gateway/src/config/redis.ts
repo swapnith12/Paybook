@@ -1,7 +1,8 @@
-import Redis from 'ioredis';
+import {Redis , type RedisOptions }from 'ioredis';
 import { config } from '.';
 import logger from './logger';
-
+import { loadEnvFile } from 'node:process';
+loadEnvFile(".env.example")
 class RedisClient {
   private static instance: Redis;
   private static isConnected = false;
@@ -10,13 +11,16 @@ class RedisClient {
 
   public static getInstance(): Redis {
     if (!RedisClient.instance) {
-      RedisClient.instance = new Redis(config.REDIS_URL, {
+      const options: RedisOptions = {
+        host: "localhost",
+        port: 6379,
+        password: process.env.REDIS_PASSWORD,
         retryStrategy: (times: number) => {
-          const delay = Math.min(times * 50, 2000);
-          return delay;
+          return Math.min(times * 50, 2000);
         },
-        maxRetriesPerRequest: 3,
-      });
+      };
+
+      RedisClient.instance = new Redis(options);
 
       RedisClient.setupEventListeners();
     }

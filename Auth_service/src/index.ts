@@ -5,7 +5,6 @@ import { ruruHTML } from 'ruru/server';
 import userSchema from './models/users/userSchema.js';
 import './Auth/google.strategy.js';
 import './Auth/passport.js'
-import {sessionMiddleware} from './utils/session.js'
 import Authroutes from './routes/Auth/routes.auth.js'
 import cookieParser from 'cookie-parser'
 
@@ -15,11 +14,10 @@ const PORT = 3001;
 const app = Express();
 
 app.use(Express.json());
-// session middlewares
-app.use(sessionMiddleware)
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(cookieParser())
+app.use(passport.initialize());
+
+
 
 app.all('/graphql',createHandler({
     schema:userSchema

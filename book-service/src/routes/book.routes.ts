@@ -7,6 +7,17 @@ import streamifier from "streamifier";
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
+
+router.get("/allBooks",async(req,res)=>{
+  const books = await prisma.book.findMany({
+    orderBy:{
+      createdAt:"desc"
+    }
+  })
+  res.send(books)
+})
+
+
 router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const { title } = req.body;

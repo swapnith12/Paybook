@@ -9,6 +9,7 @@ import { limiter } from './middlewares/rate-limiter.middleware';
 import { config } from './config';
 import logger from './config/logger';
 import { proxyServices } from './config/services';
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
@@ -16,13 +17,17 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(limiter);
-
+app.use(cookieParser())
 
 // Request logging
 app.use((req: Request, res: Response, next: NextFunction) => {
   logger.debug(`${req.method} ${req.url}`);
   next();
 });
+
+app.get("/",(req,res)=>{
+  res.send("Welcom to api-gateway")
+})
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

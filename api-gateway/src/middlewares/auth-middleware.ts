@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import  redis  from "../config/redis";
-
+import { Request, Response, NextFunction } from "express"
+import redis from "../config/redis"
 
 export const authenticate = async (
   req: Request,
@@ -8,31 +7,37 @@ export const authenticate = async (
   next: NextFunction
 ) => {
   try {
-    const sessionId = req.cookies?.sessionId;
+    const sessionId = req.cookies?.sessionId
 
     if (!sessionId) {
-       res.status(401).json({
+      return res.status(401).json({
+        success: false,
         message: "Unauthorized - No session",
       });
-      return
     }
 
+    // 🔎 Check Redis
     const userData = await redis.get(`session:${sessionId}`);
 
     if (!userData) {
-       res.status(401).json({
-        message: "Session expired",
+      // Optional: clear invalid cookie
+      res.clearCookie("sessionId")
+
+      return res.status(401).json({
+        success: false,
+        message: "Session expired or invalid",
       });
-      return 
     }
 
+    // 🔎 Attach user to request
     req.user = JSON.parse(userData);
 
     next();
   } catch (error) {
-    console.error("Auth error:", error);
+    console.error("Auth middleware error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
+      success: false,
       message: "Internal server error",
     });
   }

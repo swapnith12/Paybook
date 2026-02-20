@@ -1,4 +1,4 @@
-# VBANK - Microservices Masterclass
+# BookStream - Microservices Masterclass
 
 NOTE: This is still in WIP (Work In Progress)
 
@@ -14,8 +14,8 @@ A banking application built with microservices architecture.
 | ------------------- | ---- | ------------------------------ |
 | API Gateway         | 3000 | Entry point for all requests   |
 | Auth Service        | 3001 | Authentication & authorization |
-| Account Service     | 3002 | Account management             |
-| Transaction Service | 3003 | Transaction processing         |
+| Book Service     | 3002 | book management             |
+| Stream Service | 3003 | Stream processing         |
 
 ### Supporting Services
 
