@@ -30,12 +30,16 @@ A banking application built with microservices architecture.
 - TypeScript
 - Express.js
 - Redis
+- kafka
+- passportJS
+- Prisma ORM
+- MongoDB Atlas
 - Microservices Architecture
 
 ## 🚦 Getting Started
 
 1. Clone the repository
 2. Install dependencies for each service
-3. Start Redis via docker-compose.yml file
+3. Start Redis & Kafka via docker-compose.yml file
 4. Start individual services
 5. Access the API through the gateway at `localhost:3000`
