@@ -5,9 +5,9 @@ import kafka from "./config/kafka";
 const app = express();
 
 app.use(express.json());
-app.use("/ap1/v1/stream", bookRoutes);
+app.use("/api/v1/stream", bookRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 const start = async () => {
   await kafka.connectProducer();

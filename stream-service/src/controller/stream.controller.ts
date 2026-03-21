@@ -6,8 +6,14 @@ import { BookStreamEvent } from '../config/types';
 
 export const streamBook = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id.toString();
+    const ip: string =
+      req.headers['x-forwarded-for']?.toString().split(',')[0] ||
+      req.socket.remoteAddress ||
+      'unknown';
 
+    const userAgent: string = req.headers['user-agent'] ?? 'unknown';
+
+    const id = req.params.id.toString();
 
     const book = await prisma.book.findUnique({
       where: { id },
@@ -20,7 +26,18 @@ export const streamBook = async (req: Request, res: Response) => {
     const range = req.headers.range;
 
     if (!range) {
-      return res.status(416).send('Range header required');
+      const cloudResponse = await axios.get(book.fileUrl, {
+        responseType: 'stream',
+      });
+
+      res.status(200);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Length', cloudResponse.headers['content-length'] || '');
+      res.setHeader('Accept-Ranges', 'bytes');
+
+      sendKafkaEvent(id, ip, userAgent);
+
+      return cloudResponse.data.pipe(res);
     }
 
     const cloudResponse = await axios.get(book.fileUrl, {
@@ -42,15 +59,7 @@ export const streamBook = async (req: Request, res: Response) => {
       res.setHeader('Content-Length', cloudResponse.headers['content-length']);
     }
 
-    const event: BookStreamEvent = {
-      type: 'BOOK_STREAM',
-      bookId: id,
-      ip: req.ip,
-      userAgent: req.headers['user-agent'],
-      timestamp: Date.now(),
-    };
-
-    kafka.sendMessage('book-events', event);
+    sendKafkaEvent(id, ip, userAgent);
 
     cloudResponse.data.pipe(res);
   } catch (error: any) {
@@ -58,3 +67,19 @@ export const streamBook = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Streaming failed' });
   }
 };
+
+
+function sendKafkaEvent(bookId: string, ip: string, userAgent: string) {
+  const event: BookStreamEvent = {
+    type: 'BOOK_STREAM',
+    bookId,
+    ip,
+    userAgent,
+    timestamp: Date.now(),
+  };
+
+
+  kafka.sendMessage('book-events', event).catch((err: any) => {
+    console.error('Kafka error:', err.message);
+  });
+}

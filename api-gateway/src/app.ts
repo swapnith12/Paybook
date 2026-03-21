@@ -26,7 +26,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/",(req,res)=>{
-  res.send("Welcom to api-gateway")
+  res.send("Welcome to api-gateway")
 })
 
 // Health check endpoint
